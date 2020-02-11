@@ -82,12 +82,13 @@ export default function ListTracks(props) {
 }
 
 function prepareInfoTracks(tracks) {
+  const origin = window.location.origin;
   return tracks.map(function(info) {
     return {
       name: info.name,
       id: info.id,
       uuid: info.uuid,
-      img: 'http://188.120.254.114' + info.image,
+      img: origin + info.image,
       isAdded: info.isAdded
     }
   })
