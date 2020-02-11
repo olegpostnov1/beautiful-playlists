@@ -23,7 +23,7 @@ export default function Track(props) {
         <Button 
           variant="link" 
           className="align-self-center" 
-          onClick={() => action(props.info.id)}
+          onClick={() => action(props.info)}
         >{props.mode === 'edit' ? 'Удалить' : props.info.isAdded ? 'Отмена' : 'Добавить'}</Button>
       </Media>
       <ImageModal
@@ -34,10 +34,12 @@ export default function Track(props) {
     </>
   )
 
-  function action(uuid) {
-    const handler = isRemove(props) ? props.onRemove : props.onAdd;
+  function action(info) {
 
-    handler(uuid);
+    if (props.mode === 'edit') return props.onRemove(info.id)
+    if (props.mode === 'add' && info.isAdded) return props.onRemove(info.uuid)
+
+    return props.onAdd(info.uuid)
   }
 
   function getStyleTrack() {
@@ -47,8 +49,4 @@ export default function Track(props) {
       background: 'lightgreen'
     }
   }
-}
-
-function isRemove(props) {
-  return props.mode === 'edit' || props.info.isAdded
 }

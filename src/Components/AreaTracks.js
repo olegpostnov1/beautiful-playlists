@@ -51,11 +51,16 @@ export default function AreaTracks(props) {
 
 function reorder(props, startIndex, endIndex) {
 
-  const arrTracks = Array.from(props.tracks);
-  const [removed] = arrTracks.splice(startIndex, 1);
-  arrTracks.splice(endIndex, 0, removed);
+  const tracks = Array.from(props.tracks);
+  const [removed] = tracks.splice(startIndex, 1);
+  tracks.splice(endIndex, 0, removed);
 
-  const uuidTracks = arrTracks.map(item => item.uuid);
+  const newTracks = tracks.map(function(item) {
+    return {
+      id: item.id,
+      uuid: item.uuid
+    }
+  });
 
-  props.onChangeInfo({tracks: uuidTracks});
+  props.onChangeInfo({tracks: newTracks});
 };

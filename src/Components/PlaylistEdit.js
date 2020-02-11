@@ -59,13 +59,18 @@ export default function PlaylistEdit(props) {
 }
 
 function getInfoTracks(tracksOfPlaylist, allTracks) {
-  const arrUuid = tracksOfPlaylist;
-  
   let infoTracks = [];
-  for (let i in arrUuid) {
-    const info = allTracks.find(track => track.uuid === arrUuid[i]);
-    if (info) infoTracks.push(info);
+  for (let i in tracksOfPlaylist) {
+  
+    const objTrack = tracksOfPlaylist[i];
+    let info = allTracks.find(track => track.uuid === objTrack.uuid);
+  
+    if (info) {
+      let obj = Object.assign({}, info);
+      obj.id = objTrack.id;
+      infoTracks.push(obj);
+    }
   }
   
-  return infoTracks;
+  return infoTracks
 }

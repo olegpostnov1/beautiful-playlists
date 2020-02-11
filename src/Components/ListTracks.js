@@ -1,6 +1,7 @@
 import React from "react";
 import Track from './Track';
 import { Draggable } from "react-beautiful-dnd";
+import Helper from '../Helper';
 
 export default function ListTracks(props) {
 
@@ -37,7 +38,7 @@ export default function ListTracks(props) {
   return (
     <>
       {items.map((item, index) => (
-        <div key={item.id} style={getItemStyle()}>
+        <div key={item.uuid} style={getItemStyle()}>
           <Track 
             info={item} 
             mode={props.mode}
@@ -50,16 +51,24 @@ export default function ListTracks(props) {
     </>
   );
 
-  function removeTrack(uuid) {
+  function removeTrack(id) {
     
-    const infoTrack = props.items.find(item => item.uuid === uuid);
+    const inxTrack = props.items.findIndex(item => item.id === id);
+    if (inxTrack === -1) return;
 
-    if (!window.confirm(`Удалить ${infoTrack.name}?`)) return;
+    if (!window.confirm(`Удалить ${props.items[inxTrack].name}?`)) return;
 
-    const arrTracks = props.items.filter(item => item.uuid !== uuid)
-                                 .map(item => item.uuid);
+    let tracks = Helper.deepClone(props.items);
+    tracks.splice(inxTrack, 1);
+
+    tracks = tracks.map(function(track) {
+      return {
+        id: track.id,
+        uuid: track.uuid
+      }
+    });
     
-    props.onChangeInfo({tracks: arrTracks})
+    props.onChangeInfo({tracks: tracks})
   }
 
   function getItemStyle(isDragging, draggableStyle) {
@@ -76,7 +85,8 @@ function prepareInfoTracks(tracks) {
   return tracks.map(function(info) {
     return {
       name: info.name,
-      id: info.uuid,
+      id: info.id,
+      uuid: info.uuid,
       img: 'http://188.120.254.114' + info.image,
       isAdded: info.isAdded
     }

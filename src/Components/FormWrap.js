@@ -18,7 +18,8 @@ export default function FormWrap(props) {
   
   const formAddTracks = (
     <FormAddTracks 
-      tracks={getNotAddedTracks(props.allTracks, props.infoPlaylist.tracks)}
+      tracks={props.allTracks}
+      lastId={props.lastId}
       onChangeMode={props.onChangeMode}
       onAddTracks={handlerAddTracks}
     />
@@ -44,8 +45,4 @@ export default function FormWrap(props) {
 
     props.onChangeInfo({tracks: list});
   }
-}
-
-function getNotAddedTracks(all, added) {
-  return all.filter(item => added.indexOf(item.uuid) === -1);
 }

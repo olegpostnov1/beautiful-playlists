@@ -44,7 +44,15 @@ export default class FormAddTracks extends React.Component {
   }
 
   addToPlylist() {
-    this.props.onAddTracks(this.state.added);
+    const newTracks = this.state.added.map((uuid, inx) => {
+      const id = this.props.lastId + inx + 1;
+      return {
+        id: '' + id,
+        uuid: uuid
+      }
+    })
+
+    this.props.onAddTracks(newTracks);
     this.props.onChangeMode();
   }
 

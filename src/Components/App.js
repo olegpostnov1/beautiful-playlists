@@ -1,7 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Alert } from "react-bootstrap";
 import FormWrap from './FormWrap';
-import Helper from "../Helper";
 
 export default class App extends React.Component {
   
@@ -19,11 +18,15 @@ export default class App extends React.Component {
       isError: false
     };
 
-    this.backupInfo = null;
+    this.backupInfo = {
+      name: '',
+      tracksStr: ''
+    };
 
     this.handlerChangeMode = this.handlerChangeMode.bind(this);
     this.changeInfo = this.changeInfo.bind(this);
     this.apply = this.apply.bind(this);
+    this.getLastId = this.getLastId.bind(this);
   }
 
   componentDidMount() {
@@ -31,9 +34,9 @@ export default class App extends React.Component {
 
     this.setState({isLoading: true});
 
-    const id = getIdPlaylist();
+    const idPlaylist = getIdPlaylist();
 
-    pull(id).then(
+    pull(idPlaylist).then(
       (result) => {
         const [allTracks, infoPlaylist] = result;
         
@@ -42,20 +45,21 @@ export default class App extends React.Component {
         });
 
         if (infoPlaylist) {
-          const data = infoPlaylist.data[0];
+          const data = preparePullData(infoPlaylist.data[0]);
+          
           this.setState({
             infoPlaylist: {
               name: data.name,
               tracks: data.tracks,
-              id: id
-            }
-          })
+              id: idPlaylist
+        }
+          });
+        
+          this.backupInfo = backup(data.name, infoPlaylist.data[0].tracks);
         }
         
-        const initInfo = infoPlaylist ? infoPlaylist.data[0] : this.state.infoPlaylist;
-        this.backupInfo = backup(initInfo);
-        
         this.setState({isLoading: false});
+      
       }, 
       (error) => {
         this.setState({
@@ -90,7 +94,7 @@ export default class App extends React.Component {
   }
 
   apply() {
-    var data = this.state.infoPlaylist;
+    var data = preparePushData(this.state.infoPlaylist);
     return push(data)
       .then(
         (result) => {
@@ -103,6 +107,12 @@ export default class App extends React.Component {
           console.log('error', error)
         }
       );
+  }
+
+  getLastId() {
+    const arrId = this.state.infoPlaylist.tracks.map(track => parseInt(track.id));
+
+    return Math.max.apply(null, arrId)
   }
 
   render() {
@@ -122,6 +132,7 @@ export default class App extends React.Component {
                   onChangeInfo={this.changeInfo}
                   onSubmit={this.apply}
                   wasModified={this.state.wasModified}
+                  lastId={this.getLastId()}
                 />
               </div>
             </div>
@@ -181,10 +192,10 @@ function push(data) {
   return fetch(path, options).then(res => res.json())
 }
 
-function backup(info) {
+function backup(name, tracks) {
   return {
-    name: info.name,
-    tracks: Helper.deepClone(info.tracks)
+    name: name,
+    tracksStr: JSON.stringify(tracks)
   }
 }
 
@@ -192,7 +203,29 @@ function checkModified(current, backup) {
     
     if (current.name !== backup.name) return true;
 
-    if (JSON.stringify(current.tracks) !== JSON.stringify(backup.tracks)) return true;
+    const curTracks = current.tracks.map(track => track.uuid);
+
+    if (JSON.stringify(curTracks) !== backup.tracksStr) return true;
 
     return false;
+}
+
+function preparePullData(data) {
+  return {
+    name: data.name,
+    tracks: data.tracks.map(function(uuid, index) {
+      return {
+        id: '' + index, // индекс внутри приложения для однозначной идентификации при удалении
+        uuid: uuid // индекс в бд
+      }
+    })
+  }
+}
+
+function preparePushData(data) {
+  return {
+    id: data.id,
+    name: data.name,
+    tracks: data.tracks.map(track => track.uuid)
+  }
 }
