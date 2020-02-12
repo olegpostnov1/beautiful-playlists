@@ -111,6 +111,7 @@ export default class App extends React.Component {
 
   getLastId() {
     const arrId = this.state.infoPlaylist.tracks.map(track => parseInt(track.id));
+    if (!arrId.length) return 0;
 
     return Math.max.apply(null, arrId)
   }
