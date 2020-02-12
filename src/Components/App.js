@@ -23,10 +23,13 @@ export default class App extends React.Component {
       tracksStr: ''
     };
 
+    this.isNewPlaylist = window.location.pathname.indexOf('playlist/update/') === -1;
+
     this.handlerChangeMode = this.handlerChangeMode.bind(this);
     this.changeInfo = this.changeInfo.bind(this);
     this.apply = this.apply.bind(this);
     this.getLastId = this.getLastId.bind(this);
+    this.getHeader = this.getHeader.bind(this);
   }
 
   componentDidMount() {
@@ -116,13 +119,19 @@ export default class App extends React.Component {
     return Math.max.apply(null, arrId)
   }
 
+  getHeader() {
+    if (this.state.isModeAddTracks) return 'Добавить треки';
+
+    return this.isNewPlaylist ? 'Создать плейлист' : 'Изменить плейлист'
+  }
+
   render() {
     return (
       <Container>
         <Row className="justify-content-md-center">
           <Col lg="6">
             <div className="wrap-main">
-              <h3>Создать плейлист</h3>
+              <h3>{this.getHeader()}</h3>
               <div className="wrap-playlist">
                 <FormWrap
                   isLoading={this.state.isLoading} 
