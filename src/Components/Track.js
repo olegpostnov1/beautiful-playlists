@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { Button, Media } from "react-bootstrap";
 import ImageModal from './ImageModal';
+import * as Icon from 'react-bootstrap-icons';
 
 export default function Track(props) {
 
@@ -24,7 +25,7 @@ export default function Track(props) {
           variant="link" 
           className="align-self-center" 
           onClick={() => action(props.info)}
-        >{props.mode === 'edit' ? 'Удалить' : props.info.isAdded ? 'Отмена' : 'Добавить'}</Button>
+        >{getIconBtn()}</Button>
       </Media>
       <ImageModal
         show={isShowImage}
@@ -48,5 +49,11 @@ export default function Track(props) {
     return {
       background: 'lightgreen'
     }
+  }
+
+  function getIconBtn() {
+    if (props.mode === 'edit') return <Icon.Trash size={32}/>
+
+    return props.info.isAdded ? <Icon.Dash size={44}/> : <Icon.Plus size={44}/>
   }
 }
