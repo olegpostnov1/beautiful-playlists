@@ -1,28 +1,3 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.wrap-main {
-  margin: 10px 0;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-}
-
-.wrap-main h3 {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  background-color: rgba(0, 0, 0, 0.1);
-  padding: 10px 15px;
-}
-
-.wrap-main .wrap-playlist {
-  padding: 0 15px 10px 15px;
-}
-
 .track {
   padding: 10px;
   border-radius: 2px;
