@@ -70,14 +70,17 @@ export default class FormAddTracks extends React.Component {
             />          
           </div>
         </Form.Group>
-        
         <Button 
           variant="primary" 
           onClick={this.addToPlylist}
           disabled={!this.state.added.length}
           style={{width: '90px'}}
         >ОК</Button>
-        <Button variant="link" onClick={this.props.onChangeMode}>Отмена</Button>
+        <Button
+          style={{'marginLeft': '5px'}}
+          variant="light" 
+          onClick={this.props.onChangeMode}
+        >Отмена</Button>
       </Form>
     );
   }
