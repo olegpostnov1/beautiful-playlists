@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col, Alert } from "react-bootstrap";
+import { Container, Alert, Card } from "react-bootstrap";
 import FormWrap from './FormWrap';
 
 export default class App extends React.Component {
@@ -127,12 +127,10 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <Container>
-        <Row className="justify-content-md-center">
-          <Col lg="6">
-            <div className="wrap-main">
-              <h3>{this.getHeader()}</h3>
-              <div className="wrap-playlist">
+      <Container style={{ width: '32rem' }}>
+        <Card>
+          <Card.Header>{this.getHeader()}</Card.Header>
+          <Card.Body>
                 <FormWrap
                   isLoading={this.state.isLoading} 
                   isModeAddTracks={this.state.isModeAddTracks}
@@ -144,13 +142,9 @@ export default class App extends React.Component {
                   wasModified={this.state.wasModified}
                   lastId={this.getLastId()}
                 />
-              </div>
-            </div>
-            {
-              this.state.isError && (<Alert variant='danger'>Что-то пошло не так...</Alert>)
-            }
-          </Col>
-        </Row>
+          </Card.Body>
+          {this.state.isError && (<Alert variant='danger'>Что-то пошло не так...</Alert>)}
+        </Card>
       </Container>
     );
   }
