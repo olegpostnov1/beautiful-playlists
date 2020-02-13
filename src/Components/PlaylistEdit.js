@@ -33,6 +33,12 @@ export default function PlaylistEdit(props) {
         type="submit"
         disabled={!props.wasModified || !isValidForm() || isLoading}
       >Применить</Button>
+      <Button
+        style={{'marginLeft': '5px'}}
+        variant="light" 
+        type="button"
+        onClick={() => window.history.back()}
+      >Назад</Button>
     </Form>
   );
 
